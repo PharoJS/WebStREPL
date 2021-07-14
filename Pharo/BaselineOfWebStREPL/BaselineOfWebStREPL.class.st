@@ -12,5 +12,6 @@ BaselineOfWebStREPL >> baseline: spec [
 		baseline: 'PharoJS'
 		with: [ spec repository: 'github://PharoJS/PharoJS:pharo9' ].
 
-	spec package: 'WebStREPL' with: [ spec requires: #( 'PharoJS' ) ]
+	spec package: 'WebStREPL' with: [ spec requires: #( 'PharoJS' ) ];
+		package: 'WebStREPLTests' with: [ spec requires: #( 'WebStREPL' ) ].
 ]
