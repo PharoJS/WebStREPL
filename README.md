@@ -4,6 +4,6 @@
 ```st
 Metacello new
   baseline: 'WebStREPL';
-  repository: 'github://PharoJS/WebStREPL';
+  repository: 'github://PharoJS/WebStREPL:main';
   load
   ```
