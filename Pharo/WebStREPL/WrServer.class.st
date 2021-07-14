@@ -32,11 +32,6 @@ WrServer >> isReady [
 ]
 
 { #category : #accessing }
-WrServer >> localUrl [
-	^zincServer localUrl 
-]
-
-{ #category : #accessing }
 WrServer >> port [
 	^zincServer port
 ]
@@ -44,6 +39,14 @@ WrServer >> port [
 { #category : #initialization }
 WrServer >> port: portNumber [
 	zincServer port: portNumber
+]
+
+{ #category : #accessing }
+WrServer >> replUrl [
+
+	^ zincServer localUrl
+		  addPathSegment: #repl;
+		  yourself
 ]
 
 { #category : #running }
