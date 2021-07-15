@@ -1,3 +1,8 @@
+"
+I am a minimal Zinc web server.
+
+To demo, do `server := WrServer new.	server start.` in a playground. Then visit `http://localhost:7042/index.html?q=61+factorial` in a web browser.
+"
 Class {
 	#name : #WrServer,
 	#superclass : #Object,
@@ -62,5 +67,5 @@ WrServer >> stop [
 
 { #category : #initialization }
 WrServer >> webRequestHandlerClass [
-	^ZnReadEvalPrintDelegate 
+	^WrServerDelegate 
 ]
