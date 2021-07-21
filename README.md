@@ -8,6 +8,12 @@ This issue was highlighted by [Programming Idioms](https://programming-idioms.or
 
 So we decided to use [PharoJS](https://github.com/PharoJS/PharoJS) to implement a web-based, Smalltalk REPL.
 
+## Warning
+
+At the moment this is not ready to be exposed to a public link, because it does a simple `evaluate:` of whatever the remote browser sends which is a serious security hazard (they can do anything with your image!!!). However, it shows a simple client-server interaction which may be instructive.
+
+We will shortly have a secure solution.
+
 ## Install
 ```st
 Metacello new
