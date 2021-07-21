@@ -9,10 +9,10 @@ Class {
 
 { #category : #'code-critics' }
 ManifestWebStREPL class >> ruleBadMessageRule2V1FalsePositive [
-	^ #(#(#(#RGMethodDefinition #(#WrServerDelegate #handleRequest: #false)) #'2021-07-14T21:53:06.316455-04:00') )
+	^ #(#(#(#RGMethodDefinition #(#WrFormServerDelegate #handleRequest: #false)) #'2021-07-14T21:53:06.316455-04:00') )
 ]
 
 { #category : #'code-critics' }
 ManifestWebStREPL class >> ruleUtilityMethodsRuleV1FalsePositive [
-	^ #(#(#(#RGMethodDefinition #(#WrServerDelegate #index: #false)) #'2021-07-14T23:30:32.276741-04:00') #(#(#RGMethodDefinition #(#WrServerDelegate #css: #false)) #'2021-07-14T23:47:04.00281-04:00') )
+	^ #(#(#(#RGMethodDefinition #(#WrFormServerDelegate #index: #false)) #'2021-07-14T23:30:32.276741-04:00') #(#(#RGMethodDefinition #(#WrFormServerDelegate #css: #false)) #'2021-07-14T23:47:04.00281-04:00') )
 ]

@@ -1,10 +1,5 @@
-"
-I am a minimal Zinc web server.
-
-To demo, do `server := WrServer new.	server start.` in a playground. Then visit `http://localhost:7042/index.html?q=61+factorial` in a web browser.
-"
 Class {
-	#name : #WrServer,
+	#name : #WrFormServer,
 	#superclass : #Object,
 	#instVars : [
 		'zincServer'
@@ -13,17 +8,17 @@ Class {
 }
 
 { #category : #initialization }
-WrServer class >> defaultPort [
+WrFormServer class >> defaultPort [
 	^7042
 ]
 
 { #category : #initialization }
-WrServer >> defaultPort [
+WrFormServer >> defaultPort [
 	^self class defaultPort
 ]
 
 { #category : #initialization }
-WrServer >> initialize [
+WrFormServer >> initialize [
 
 	super initialize.
 	zincServer := ZnManagingMultiThreadedServer new.
@@ -32,22 +27,22 @@ WrServer >> initialize [
 ]
 
 { #category : #running }
-WrServer >> isReady [
+WrFormServer >> isReady [
 	^zincServer isRunning and: [zincServer isListening]
 ]
 
 { #category : #accessing }
-WrServer >> port [
+WrFormServer >> port [
 	^zincServer port
 ]
 
 { #category : #initialization }
-WrServer >> port: portNumber [
+WrFormServer >> port: portNumber [
 	zincServer port: portNumber
 ]
 
 { #category : #accessing }
-WrServer >> replUrl [
+WrFormServer >> replUrl [
 
 	^ zincServer localUrl
 		  addPathSegment: #repl;
@@ -55,17 +50,17 @@ WrServer >> replUrl [
 ]
 
 { #category : #running }
-WrServer >> start [
+WrFormServer >> start [
 	zincServer start
 ]
 
 { #category : #running }
-WrServer >> stop [
+WrFormServer >> stop [
 
 	zincServer stop
 ]
 
 { #category : #initialization }
-WrServer >> webRequestHandlerClass [
+WrFormServer >> webRequestHandlerClass [
 	^WrFormServerDelegate 
 ]

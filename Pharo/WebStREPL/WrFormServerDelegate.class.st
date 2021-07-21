@@ -6,7 +6,7 @@ I do all the actual work of the requests.
 The current implementation of `evaluate:` is not sufficiently robust!
 "
 Class {
-	#name : #WrServerDelegate,
+	#name : #WrFormServerDelegate,
 	#superclass : #Object,
 	#instVars : [
 		'prefixMap'
@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : #responses }
-WrServerDelegate >> css: request [
+WrFormServerDelegate >> css: request [
 	| css |"#1E90FF"
 	css :=
 	'body { color: #2080E0; background: white; width: 900px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 13px }
@@ -33,7 +33,7 @@ code {
 ]
 
 { #category : #'public access' }
-WrServerDelegate >> evaluate: string [
+WrFormServerDelegate >> evaluate: string [
 	| output |
 	output := String streamContents: [ :out | 
 		[ 	| compiler result |
@@ -52,7 +52,7 @@ WrServerDelegate >> evaluate: string [
 ]
 
 { #category : #responses }
-WrServerDelegate >> favicon: request [
+WrFormServerDelegate >> favicon: request [
 	"Answer a nice favicon for browsers to display"
 
 	| entity |
@@ -61,7 +61,7 @@ WrServerDelegate >> favicon: request [
 ]
 
 { #category : #data }
-WrServerDelegate >> faviconBytes [
+WrFormServerDelegate >> faviconBytes [
 	^ #(
  0 0 1 0 1 0 16 16 0 0 1 0 4 0 40 1
  0 0 22 0 0 0 40 0 0 0 16 0 0 0 32 0
@@ -87,7 +87,7 @@ WrServerDelegate >> faviconBytes [
 ]
 
 { #category : #public }
-WrServerDelegate >> handleRequest: request [
+WrFormServerDelegate >> handleRequest: request [
 	| prefix prefixHandler |
 	"self halt."
 	prefix := request uri isSlash
@@ -102,7 +102,7 @@ WrServerDelegate >> handleRequest: request [
 ]
 
 { #category : #responses }
-WrServerDelegate >> index: request [
+WrFormServerDelegate >> index: request [
 	| page query |
 	query := request uri queryAt: #q ifAbsent: [''].
 	page := ZnHtmlOutputStream streamContents: [ :html | "self halt."
@@ -138,7 +138,7 @@ WrServerDelegate >> index: request [
 ]
 
 { #category : #initialization }
-WrServerDelegate >> initialize [
+WrFormServerDelegate >> initialize [
 	self
 		map: 'ping' to: #ping:;
 		map: 'favicon.ico' to: #favicon:;
@@ -149,13 +149,13 @@ WrServerDelegate >> initialize [
 ]
 
 { #category : #responses }
-WrServerDelegate >> js: request [
+WrFormServerDelegate >> js: request [
 
 	^ ZnResponse ok: (ZnEntity javascript: '/* empty */')
 ]
 
 { #category : #accessing }
-WrServerDelegate >> map: prefix to: handler [
+WrFormServerDelegate >> map: prefix to: handler [
 	"Arrange for the receiver to dispatch requests matching prefix to handler.
 	Handler can be a symbol naming a method in the receiver, 
 	or a block accepting the request and producing the response.
@@ -168,11 +168,11 @@ WrServerDelegate >> map: prefix to: handler [
 ]
 
 { #category : #responses }
-WrServerDelegate >> ping: request [
+WrFormServerDelegate >> ping: request [
 	^ ZnResponse ok: (ZnEntity html: 'pong')
 ]
 
 { #category : #accessing }
-WrServerDelegate >> prefixMap [
+WrFormServerDelegate >> prefixMap [
 	^ prefixMap ifNil: [ prefixMap := Dictionary new ]
 ]
