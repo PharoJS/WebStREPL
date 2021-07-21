@@ -1,13 +1,13 @@
 Class {
-	#name : #WrFetchServerTest,
+	#name : #WrWebSocketServerTest,
 	#superclass : #TestCase,
 	#traits : 'WrTTestCase',
 	#classTraits : 'WrTTestCase classTrait',
-	#category : #'WebStREPLTests-Fetch'
+	#category : #'WebStREPLTests-WebSocket'
 }
 
 { #category : #tests }
-WrFetchServerTest >> send: aString [
+WrWebSocketServerTest >> send: aString [
 
 	^ ZnClient new
 		  url: server replUrl;
@@ -16,7 +16,7 @@ WrFetchServerTest >> send: aString [
 ]
 
 { #category : #tests }
-WrFetchServerTest >> serverClass [
+WrWebSocketServerTest >> serverClass [
 
-	^ WrFetchServer
+	^ WrWebSocketServer 
 ]

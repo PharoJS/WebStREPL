@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'server'
 	],
-	#category : #'WebStREPLTests-Fetch'
+	#category : #'WebStREPLTests-Common'
 }
 
 { #category : #tests }
@@ -21,10 +21,16 @@ WrTTestCase >> send: aString [
 ]
 
 { #category : #tests }
+WrTTestCase >> serverClass [
+
+	self explicitRequirement 
+]
+
+{ #category : #tests }
 WrTTestCase >> setUp [
 
 	super setUp.
-	server := WrFetchServer new.
+	server := self serverClass new.
 	server start
 ]
 

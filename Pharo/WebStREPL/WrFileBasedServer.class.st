@@ -1,24 +1,24 @@
 Class {
-	#name : #WrFormServer,
+	#name : #WrFileBasedServer,
 	#superclass : #Object,
 	#instVars : [
 		'zincServer'
 	],
-	#category : #'WebStREPL-Form'
+	#category : #'WebStREPL-Common'
 }
 
 { #category : #initialization }
-WrFormServer class >> defaultPort [
+WrFileBasedServer class >> defaultPort [
 	^7042
 ]
 
 { #category : #initialization }
-WrFormServer >> defaultPort [
+WrFileBasedServer >> defaultPort [
 	^self class defaultPort
 ]
 
 { #category : #initialization }
-WrFormServer >> initialize [
+WrFileBasedServer >> initialize [
 
 	super initialize.
 	zincServer := ZnManagingMultiThreadedServer new.
@@ -27,22 +27,22 @@ WrFormServer >> initialize [
 ]
 
 { #category : #running }
-WrFormServer >> isReady [
+WrFileBasedServer >> isReady [
 	^zincServer isRunning and: [zincServer isListening]
 ]
 
 { #category : #accessing }
-WrFormServer >> port [
+WrFileBasedServer >> port [
 	^zincServer port
 ]
 
 { #category : #initialization }
-WrFormServer >> port: portNumber [
+WrFileBasedServer >> port: portNumber [
 	zincServer port: portNumber
 ]
 
 { #category : #accessing }
-WrFormServer >> replUrl [
+WrFileBasedServer >> replUrl [
 
 	^ zincServer localUrl
 		  addPathSegment: #repl;
@@ -50,17 +50,18 @@ WrFormServer >> replUrl [
 ]
 
 { #category : #running }
-WrFormServer >> start [
+WrFileBasedServer >> start [
 	zincServer start
 ]
 
 { #category : #running }
-WrFormServer >> stop [
+WrFileBasedServer >> stop [
 
 	zincServer stop
 ]
 
 { #category : #initialization }
-WrFormServer >> webRequestHandlerClass [
-	^WrFormServerDelegate 
+WrFileBasedServer >> webRequestHandlerClass [
+
+	^ self subclassResponsibility 
 ]

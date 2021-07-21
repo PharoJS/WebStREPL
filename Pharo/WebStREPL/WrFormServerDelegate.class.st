@@ -11,7 +11,7 @@ Class {
 	#instVars : [
 		'prefixMap'
 	],
-	#category : #'WebStREPL-Server'
+	#category : #'WebStREPL-Form'
 }
 
 { #category : #responses }
