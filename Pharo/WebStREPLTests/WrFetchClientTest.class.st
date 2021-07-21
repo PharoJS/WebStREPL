@@ -1,18 +1,18 @@
 Class {
-	#name : #WrClientTest,
+	#name : #WrFetchClientTest,
 	#superclass : #PjWebAppTestCase,
 	#traits : '(PjTAppRunsInJS + (WrTTestCase @ {#basicSetUp->#setUp})) - {#setUp}',
 	#classTraits : 'PjTAppRunsInJS classTrait + WrTTestCase classTrait',
-	#category : #WebStREPLTests
+	#category : #'WebStREPLTests-Fetch'
 }
 
 { #category : #'suite parameters' }
-WrClientTest class >> appClass [ 	
-	^WrClient 
+WrFetchClientTest class >> appClass [ 	
+	^WrFetchClient 
 ]
 
 { #category : #tests }
-WrClientTest >> send: aString [
+WrFetchClientTest >> send: aString [
 
 	| responseKey responseHandlingBlock |
 	responseKey := #WebStReplResponse.
@@ -26,14 +26,14 @@ WrClientTest >> send: aString [
 ]
 
 { #category : #tests }
-WrClientTest >> setUp [
+WrFetchClientTest >> setUp [
 	super setUp.
 	self basicSetUp.
 	app serverUrl: server replUrl printString
 ]
 
 { #category : #tests }
-WrClientTest >> testUI [
+WrFetchClientTest >> testUI [
 
 	| outputZone |
 	(document getElementById: #inputTextArea) textContent: '6 * 7'.

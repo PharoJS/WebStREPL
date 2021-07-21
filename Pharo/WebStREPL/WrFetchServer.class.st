@@ -1,24 +1,24 @@
 Class {
-	#name : #WrServer,
+	#name : #WrFetchServer,
 	#superclass : #Object,
 	#instVars : [
 		'zincServer'
 	],
-	#category : #'WebStREPL-Server'
+	#category : #'WebStREPL-Fetch'
 }
 
 { #category : #initialization }
-WrServer class >> defaultPort [
+WrFetchServer class >> defaultPort [
 	^7042
 ]
 
 { #category : #initialization }
-WrServer >> defaultPort [
+WrFetchServer >> defaultPort [
 	^self class defaultPort
 ]
 
 { #category : #initialization }
-WrServer >> initialize [
+WrFetchServer >> initialize [
 
 	super initialize.
 	zincServer := ZnManagingMultiThreadedServer new.
@@ -27,22 +27,22 @@ WrServer >> initialize [
 ]
 
 { #category : #running }
-WrServer >> isReady [
+WrFetchServer >> isReady [
 	^zincServer isRunning and: [zincServer isListening]
 ]
 
 { #category : #accessing }
-WrServer >> port [
+WrFetchServer >> port [
 	^zincServer port
 ]
 
 { #category : #initialization }
-WrServer >> port: portNumber [
+WrFetchServer >> port: portNumber [
 	zincServer port: portNumber
 ]
 
 { #category : #accessing }
-WrServer >> replUrl [
+WrFetchServer >> replUrl [
 
 	^ zincServer localUrl
 		  addPathSegment: #repl;
@@ -50,17 +50,17 @@ WrServer >> replUrl [
 ]
 
 { #category : #running }
-WrServer >> start [
+WrFetchServer >> start [
 	zincServer start
 ]
 
 { #category : #running }
-WrServer >> stop [
+WrFetchServer >> stop [
 
 	zincServer stop
 ]
 
 { #category : #initialization }
-WrServer >> webRequestHandlerClass [
+WrFetchServer >> webRequestHandlerClass [
 	^ZnReadEvalPrintDelegate 
 ]

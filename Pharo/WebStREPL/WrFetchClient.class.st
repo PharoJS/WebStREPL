@@ -1,5 +1,5 @@
 Class {
-	#name : #WrClient,
+	#name : #WrFetchClient,
 	#superclass : #PjFileBasedWebApp,
 	#instVars : [
 		'evalButtion',
@@ -7,18 +7,18 @@ Class {
 		'inputTextArea',
 		'serverUrl'
 	],
-	#category : #'WebStREPL-Client'
+	#category : #'WebStREPL-Fetch'
 }
 
 { #category : #description }
-WrClient class >> appJsSubFolder [
+WrFetchClient class >> appJsSubFolder [
 
 	<pharoJsSkip>
 	^ 'js'
 ]
 
 { #category : #evaluating }
-WrClient >> eval [
+WrFetchClient >> eval [
 
 	self
 		send: inputTextArea textContent
@@ -27,7 +27,7 @@ WrClient >> eval [
 ]
 
 { #category : #initialization }
-WrClient >> initialize [
+WrFetchClient >> initialize [
 
 	super initialize.
 	inputTextArea := self elementAt: #inputTextArea.
@@ -37,7 +37,7 @@ WrClient >> initialize [
 ]
 
 { #category : #evaluating }
-WrClient >> send: aString withResponseDo: aBlock [
+WrFetchClient >> send: aString withResponseDo: aBlock [
 
 	| promise |
 	promise := window fetch: serverUrl options: { 
@@ -47,13 +47,13 @@ WrClient >> send: aString withResponseDo: aBlock [
 ]
 
 { #category : #accessing }
-WrClient >> serverUrl [
+WrFetchClient >> serverUrl [
 
 	^ serverUrl
 ]
 
 { #category : #initialization }
-WrClient >> serverUrl: anObject [
+WrFetchClient >> serverUrl: anObject [
 
 	serverUrl := anObject
 ]
