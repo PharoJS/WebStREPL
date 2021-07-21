@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'server'
 	],
-	#category : #'WebStREPLTests-Common'
+	#category : #'WebStREPLTests-Fetch'
 }
 
 { #category : #tests }
