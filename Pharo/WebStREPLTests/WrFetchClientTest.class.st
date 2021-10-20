@@ -39,6 +39,12 @@ WrFetchClientTest >> setUp [
 ]
 
 { #category : #tests }
+WrFetchClientTest >> testNothing [
+
+	self assert: true
+]
+
+{ #category : #tests }
 WrFetchClientTest >> testUI [
 
 	| outputZone |

@@ -1,18 +1,11 @@
-"
-I am a Server delegate used by WrServer to handle the actual requests.
-
-I do all the actual work of the requests.
-
-The current implementation of `evaluate:` is not sufficiently robust!
-"
 Class {
-	#name : #WrFormServerDelegate,
+	#name : #WrFetchServerDelegate,
 	#superclass : #WrServerDelegate,
-	#category : #'WebStREPL-Form'
+	#category : #'WebStREPL-Fetch'
 }
 
 { #category : #'public access' }
-WrFormServerDelegate >> evaluate: string [
+WrFetchServerDelegate >> evaluate: string [
 	| output |
 	output := String streamContents: [ :out | 
 		[ 	| compiler result |
@@ -31,7 +24,7 @@ WrFormServerDelegate >> evaluate: string [
 ]
 
 { #category : #responses }
-WrFormServerDelegate >> index: request html: html [
+WrFetchServerDelegate >> index: request html: html [
 	| query |
 	query := request uri queryAt: #q ifAbsent: [''].
 	html

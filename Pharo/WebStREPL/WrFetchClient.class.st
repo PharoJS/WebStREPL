@@ -1,6 +1,6 @@
 Class {
 	#name : #WrFetchClient,
-	#superclass : #PjFileBasedWebApp,
+	#superclass : #PjWebApplication,
 	#instVars : [
 		'outputZone',
 		'inputTextArea',
@@ -26,16 +26,6 @@ WrFetchClient >> eval [
 		outputZone textContent: resultString ]
 ]
 
-{ #category : #initialization }
-WrFetchClient >> initialize [
-
-	super initialize.
-	inputTextArea := self elementAt: #inputTextArea.
-	evalButton := self elementAt: #evalButton.
-	outputZone := self elementAt: #outputZone.
-	evalButton addEventListener: #click block: [ self eval ]
-]
-
 { #category : #evaluating }
 WrFetchClient >> send: aString withResponseDo: aBlock [
 
@@ -56,4 +46,13 @@ WrFetchClient >> serverUrl [
 WrFetchClient >> serverUrl: anObject [
 
 	serverUrl := anObject
+]
+
+{ #category : #initialization }
+WrFetchClient >> setupElements [
+
+	inputTextArea := self elementAt: #inputTextArea.
+	evalButton := self elementAt: #evalButton.
+	outputZone := self elementAt: #outputZone.
+	evalButton addEventListener: #click block: [ self eval ]
 ]
