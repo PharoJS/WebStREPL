@@ -33,15 +33,14 @@ WrFetchClientTest >> serverClass [
 
 { #category : #tests }
 WrFetchClientTest >> setUp [
+
 	super setUp.
 	self basicSetUp.
-	app serverUrl: server replUrl asString
-]
-
-{ #category : #tests }
-WrFetchClientTest >> testNothing [
-
-	self assert: true
+	self bridge server znServer delegate
+		map: #repl
+		to: [ :request |
+			self server handleRequest: request ].
+	app serverUrl: (self bridge serverUrl / 'repl') asString
 ]
 
 { #category : #tests }

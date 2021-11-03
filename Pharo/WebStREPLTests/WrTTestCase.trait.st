@@ -21,6 +21,11 @@ WrTTestCase >> send: aString [
 ]
 
 { #category : #tests }
+WrTTestCase >> server [
+	^server
+]
+
+{ #category : #tests }
 WrTTestCase >> serverClass [
 
 	self explicitRequirement 

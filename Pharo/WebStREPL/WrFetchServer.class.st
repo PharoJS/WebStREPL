@@ -15,6 +15,11 @@ WrFetchServer class >> webRequestHandlerClass [
 ]
 
 { #category : #accessing }
+WrFetchServer >> handleRequest: request [
+	^zincServer delegate handleRequest: request
+]
+
+{ #category : #accessing }
 WrFetchServer >> replUrl [
 
 	^ self localUrl

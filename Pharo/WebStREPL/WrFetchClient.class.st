@@ -49,10 +49,29 @@ WrFetchClient >> serverUrl: anObject [
 ]
 
 { #category : #initialization }
-WrFetchClient >> setupElements [
+WrFetchClient >> setupDOM [
 
-	inputTextArea := self elementAt: #inputTextArea.
-	evalButton := self elementAt: #evalButton.
-	outputZone := self elementAt: #outputZone.
-	evalButton addEventListener: #click block: [ self eval ]
+	| title code |
+	title := self addElement: 'h1'.
+	title textContent: 'Smalltalk REPL using PharoJS'.
+	inputTextArea := self addElement: 'textarea' style: { 
+			                 (#width -> '100%').
+			                 (#height -> '300px') }.
+	inputTextArea id: #inputTextArea.
+	evalButton := self addElement: 'button'.
+	evalButton textContent: 'Eval';
+	id: #evalButton.
+	evalButton addEventListener: #click block: [ self eval ].
+	code := self addElement: 'code'.
+	outputZone := self
+		              addElement: #pre
+		              to: code
+		              style: { (#width -> '100%') }.
+	outputZone id: #outputZone
+]
+
+{ #category : #initialization }
+WrFetchClient >> start [
+	super start.
+	self setupDOM
 ]
