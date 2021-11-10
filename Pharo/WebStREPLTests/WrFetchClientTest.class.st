@@ -50,5 +50,5 @@ WrFetchClientTest >> testUI [
 	(document getElementById: #inputTextArea) textContent: '6 * 7'.
 	(document getElementById: #evalButton) click.
 	outputZone := document getElementById: #outputZone.
-	self assert: outputZone textContent equals: '42'
+	self assert: outputZone textContent trim equals: '42'
 ]

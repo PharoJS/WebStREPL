@@ -7,10 +7,16 @@ Class {
 	#category : #'WebStREPL-Fetch'
 }
 
+{ #category : #'instance creation' }
+WrFetchServer >> handleEvaluateRequest: request [
+
+	^ self delegate handleEvaluateRequest: request
+]
+
 { #category : #accessing }
 WrFetchServer >> handleRequest: request [
 
-	^ znServer delegate handleRequest: request
+	^ self delegate handleRequest: request
 ]
 
 { #category : #accessing }
@@ -18,7 +24,6 @@ WrFetchServer >> initialize [
 
 	| codeGenerator jsExporter |
 	super initialize.
-	replRequestHandler := ZnReadEvalPrintDelegate new.
 	codeGenerator := WrFetchCodeGenerator new.
 	self css: codeGenerator css.
 	self favicon: codeGenerator favicon.
@@ -29,12 +34,13 @@ WrFetchServer >> initialize [
 ]
 
 { #category : #'instance creation' }
-WrFetchServer >> newDefaultZnServerDelegate [
+WrFetchServer >> newServerDelegate [
 
 	| delegate |
-	delegate := super newDefaultZnServerDelegate.
-	delegate map: #repl to: [ :request | 
-		replRequestHandler handleRequest: request ].
+	delegate := super newServerDelegate.
+	delegate
+		map: #repl
+		to: [ :request | self handleEvaluateRequest: request ].
 	^ delegate
 ]
 
@@ -42,4 +48,9 @@ WrFetchServer >> newDefaultZnServerDelegate [
 WrFetchServer >> replUrl [
 
 	^ self url/  #repl
+]
+
+{ #category : #'instance creation' }
+WrFetchServer >> serverDelegateClass [ 
+	^WrFetchServerDelegate 
 ]
