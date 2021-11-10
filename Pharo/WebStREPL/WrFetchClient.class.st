@@ -21,8 +21,9 @@ WrFetchClient class >> appJsSubFolder [
 WrFetchClient >> eval [
 
 	self
-		send: inputTextArea textContent
+		send: inputTextArea value
 		withResponseDo: [ :resultString | 
+			console log: 'result is: '; log: resultString.
 		outputZone textContent: resultString ]
 ]
 
@@ -30,10 +31,18 @@ WrFetchClient >> eval [
 WrFetchClient >> send: aString withResponseDo: aBlock [
 
 	| promise |
+	console
+		log: 'sent string is';
+		log: aString.
 	promise := window fetch: serverUrl options: { 
 			           (#method -> 'POST').
 			           (#body -> aString) } asJsObject.
-	promise then: [ :responseWrapper | responseWrapper json then: aBlock ]
+	promise then: [ :responseWrapper | 
+		console
+			log: 'responseWrapper';
+			log: responseWrapper.
+		window at: #responseWrapper put: responseWrapper.
+		responseWrapper text then: aBlock ]
 ]
 
 { #category : #accessing }
@@ -56,11 +65,12 @@ WrFetchClient >> setupDOM [
 	title textContent: 'Smalltalk REPL using PharoJS'.
 	inputTextArea := self addElement: 'textarea' style: { 
 			                 (#width -> '100%').
-			                 (#height -> '300px') }.
+			                 (#height -> '50px') }. 
 	inputTextArea id: #inputTextArea.
 	evalButton := self addElement: 'button'.
-	evalButton textContent: 'Eval';
-	id: #evalButton.
+	evalButton
+		textContent: 'Eval';
+		id: #evalButton.
 	evalButton addEventListener: #click block: [ self eval ].
 	code := self addElement: 'code'.
 	outputZone := self
@@ -72,6 +82,8 @@ WrFetchClient >> setupDOM [
 
 { #category : #initialization }
 WrFetchClient >> start [
+
 	super start.
+	self serverUrl: 'repl'.
 	self setupDOM
 ]

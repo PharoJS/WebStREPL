@@ -11,5 +11,6 @@ WrFormServer class >> defaultPort [
 
 { #category : #initialization }
 WrFormServer class >> webRequestHandlerClass [
-	^ WrFetchServerDelegate
+
+	^ WrFormServerDelegate
 ]
