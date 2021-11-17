@@ -30,7 +30,23 @@ WrFetchServerDelegate >> evaluate: string [
 { #category : #handling }
 WrFetchServerDelegate >> handleEvaluateRequest: request [
 
-	| result |
-	result := self evaluate: request entity.
-	^ ZnResponse ok: (ZnEntity text: result)
+	| jsCode |
+	jsCode := self transpile: request entity contents.
+	^ ZnResponse ok: (ZnEntity text: jsCode)
+]
+
+{ #category : #handling }
+WrFetchServerDelegate >> transpile: stCode [
+
+	| someClass |
+	[ 
+	someClass := Class new.
+	someClass class compile: 'replMethod ^[' , stCode , ']'.
+	^ PjDependentTranspiler new
+		  pharoJsSelectorPrefix: 'pj_';
+		  alreadyConvertedClasses: PjExporter bootstrapClasses;
+		addAlreadyDefinedClasses:  PjExporter bootstrapClasses;
+		  convertToJs: someClass replMethod ]
+		on: Exception
+		do: [ :ex | ^ 'Error: ' , ex printString ]
 ]

@@ -20,8 +20,20 @@ WrFetchClient class >> appJsSubFolder [
 { #category : #evaluating }
 WrFetchClient >> eval [
 
-	self send: inputTextArea value withResponseDo: [ :resultString | 
-		outputZone textContent: resultString ]
+	self send: inputTextArea value withResponseDo: [ :jsCode | 
+		self eval: jsCode ]
+]
+
+{ #category : #evaluating }
+WrFetchClient >> eval: jsCode [
+	console
+		log: 'jsCode: ' with: jsCode.
+
+	(jsCode beginsWith: 'Error:') ifTrue: [ 
+		^ outputZone textContent: jsCode ].
+	console
+		log: 'eval jsCode: ' with: (window eval: jsCode).
+	outputZone textContent: (window eval: jsCode) value
 ]
 
 { #category : #evaluating }
