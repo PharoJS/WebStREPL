@@ -20,10 +20,7 @@ WrFetchClient class >> appJsSubFolder [
 { #category : #evaluating }
 WrFetchClient >> eval [
 
-	self
-		send: inputTextArea value
-		withResponseDo: [ :resultString | 
-			console log: 'result is: '; log: resultString.
+	self send: inputTextArea value withResponseDo: [ :resultString | 
 		outputZone textContent: resultString ]
 ]
 
@@ -31,17 +28,10 @@ WrFetchClient >> eval [
 WrFetchClient >> send: aString withResponseDo: aBlock [
 
 	| promise |
-	console
-		log: 'sent string is';
-		log: aString.
 	promise := window fetch: serverUrl options: { 
 			           (#method -> 'POST').
 			           (#body -> aString) } asJsObject.
 	promise then: [ :responseWrapper | 
-		console
-			log: 'responseWrapper';
-			log: responseWrapper.
-		window at: #responseWrapper put: responseWrapper.
 		responseWrapper text then: aBlock ]
 ]
 
