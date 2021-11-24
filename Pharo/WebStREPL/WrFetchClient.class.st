@@ -24,12 +24,13 @@ WrFetchClient >> displayError: aString [
 ]
 
 { #category : #evaluating }
-WrFetchClient >> displayResult: aString [
+WrFetchClient >> displayResult: anObject [
 
 	outputZone style color: #black.
-	aString ifNil: [ ^ outputZone textContent: 'nil' ].
-	aString ifEmpty: [ ^ outputZone textContent: '<empty string>' ].
-	outputZone textContent: aString
+	anObject ifNil: [ ^ outputZone textContent: 'nil' ].
+	(anObject isString and: [ anObject isEmpty ]) ifTrue: [ 
+		^ outputZone textContent: '<empty string>' ].
+	outputZone textContent: (String streamContents: [ : s | anObject printOn: s ])
 ]
 
 { #category : #evaluating }
