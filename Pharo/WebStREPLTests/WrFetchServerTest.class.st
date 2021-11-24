@@ -8,7 +8,7 @@ Class {
 
 { #category : #tests }
 WrFetchServerTest >> send: aString [
-
+ 
 	^ ZnClient new
 		  url: server replUrl;
 		  contents: aString;

@@ -38,14 +38,15 @@ WrFetchServerDelegate >> handleEvaluateRequest: request [
 { #category : #handling }
 WrFetchServerDelegate >> transpile: stCode [
 
-	| someClass |
+	| someClass classesToSkip |
 	[ 
 	someClass := Class new.
 	someClass class compile: 'replMethod ^[' , stCode , ']'.
+	classesToSkip := PjExporter bootstrapClasses collect: [ : each | each classToUseForJsConversion ].
 	^ PjDependentTranspiler new
 		  pharoJsSelectorPrefix: 'pj_';
-		  alreadyConvertedClasses: PjExporter bootstrapClasses;
-		addAlreadyDefinedClasses:  PjExporter bootstrapClasses;
+		  alreadyConvertedClasses: classesToSkip;
+		  addAlreadyDefinedClasses: classesToSkip;
 		  convertToJs: someClass replMethod ]
 		on: Exception
 		do: [ :ex | ^ 'Error: ' , ex printString ]

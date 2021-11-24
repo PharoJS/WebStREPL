@@ -44,12 +44,6 @@ WrFetchServer >> newServerDelegate [
 	^ delegate
 ]
 
-{ #category : #accessing }
-WrFetchServer >> replUrl [
-
-	^ self url/  #repl
-]
-
 { #category : #'instance creation' }
 WrFetchServer >> serverDelegateClass [ 
 	^WrFetchServerDelegate 

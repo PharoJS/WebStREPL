@@ -18,6 +18,21 @@ WrFetchClient class >> appJsSubFolder [
 ]
 
 { #category : #evaluating }
+WrFetchClient >> displayError: aString [
+	outputZone style color: #red.
+	outputZone textContent: aString.
+]
+
+{ #category : #evaluating }
+WrFetchClient >> displayResult: aString [
+
+	outputZone style color: #black.
+	aString ifNil: [ ^ outputZone textContent: 'nil' ].
+	aString ifEmpty: [ ^ outputZone textContent: '<empty string>' ].
+	outputZone textContent: aString
+]
+
+{ #category : #evaluating }
 WrFetchClient >> eval [
 
 	self send: inputTextArea value withResponseDo: [ :jsCode | 
@@ -26,14 +41,11 @@ WrFetchClient >> eval [
 
 { #category : #evaluating }
 WrFetchClient >> eval: jsCode [
-	console
-		log: 'jsCode: ' with: jsCode.
 
-	(jsCode beginsWith: 'Error:') ifTrue: [ 
-		^ outputZone textContent: jsCode ].
-	console
-		log: 'eval jsCode: ' with: (window eval: jsCode).
-	outputZone textContent: (window eval: jsCode) value
+	(jsCode beginsWith: 'Error:') ifTrue: [ ^ self displayError: jsCode ].
+	[ self displayResult: (window eval: jsCode) value ]
+		on: Error
+		do: [ :ex | self displayError: ex messageText ]
 ]
 
 { #category : #evaluating }
@@ -43,8 +55,9 @@ WrFetchClient >> send: aString withResponseDo: aBlock [
 	promise := window fetch: serverUrl options: { 
 			           (#method -> 'POST').
 			           (#body -> aString) } asJsObject.
-	promise then: [ :responseWrapper | 
-		responseWrapper text then: aBlock ]
+	promise
+		then: [ :responseWrapper | responseWrapper text then: aBlock ]
+		catch: [ :ex | self displayError: ex messageText]
 ]
 
 { #category : #accessing }
