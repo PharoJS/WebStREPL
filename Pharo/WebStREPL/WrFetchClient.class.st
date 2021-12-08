@@ -30,7 +30,8 @@ WrFetchClient >> displayResult: anObject [
 	anObject ifNil: [ ^ outputZone textContent: 'nil' ].
 	(anObject isString and: [ anObject isEmpty ]) ifTrue: [ 
 		^ outputZone textContent: '<empty string>' ].
-	outputZone textContent: (String streamContents: [ : s | anObject printOn: s ])
+	outputZone textContent:
+		(String streamContents: [ :s | anObject printOn: s ])
 ]
 
 { #category : #evaluating }
@@ -57,8 +58,10 @@ WrFetchClient >> send: aString withResponseDo: aBlock [
 			           (#method -> 'POST').
 			           (#body -> aString) } asJsObject.
 	promise
-		then: [ :responseWrapper | responseWrapper text then: aBlock ]
-		catch: [ :ex | self displayError: ex messageText]
+		then: [ :responseWrapper | 
+			responseWrapper text then: [ :jsCode | 
+				aBlock value: jsCode ] ]
+		catch: [ :ex | self displayError: ex messageText ]
 ]
 
 { #category : #accessing }

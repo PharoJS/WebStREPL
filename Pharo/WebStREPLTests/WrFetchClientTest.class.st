@@ -18,10 +18,14 @@ WrFetchClientTest >> send: aString [
 	responseKey := #WebStReplResponse.
 	window at: responseKey put: nil.
 	responseHandlingBlock := self evalBlock: [ 
-		                         [ :response | 
-		                         window at: responseKey put: response ] ].
+		                         [ :jsCode | 
+		                         | jsSideBlock result |
+		                         jsSideBlock := window eval: jsCode.
+		                         result := jsSideBlock value.
+		                         window at: responseKey put: result ] ].
 	app send: aString withResponseDo: responseHandlingBlock.
-	self waitWhile: [ (window at: responseKey) isNil ] timeOut: 1 second.
+	self
+		waitWhile: [ (window at: responseKey) isNil ].
 	^ window at: responseKey
 ]
 
@@ -50,5 +54,5 @@ WrFetchClientTest >> testUI [
 	(document getElementById: #inputTextArea) textContent: '6 * 7'.
 	(document getElementById: #evalButton) click.
 	outputZone := document getElementById: #outputZone.
-	self assert: outputZone textContent trim equals: '42'
+	self waitUntil:  [outputZone textContent trim = '42']
 ]
