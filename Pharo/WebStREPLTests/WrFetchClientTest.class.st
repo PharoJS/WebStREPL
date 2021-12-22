@@ -105,6 +105,12 @@ WrFetchClientTest >> testArithmetics [
 ]
 
 { #category : #tests }
+WrFetchClientTest >> testEmptyInput [
+
+	self assert: '' result: 'nil'
+]
+
+{ #category : #tests }
 WrFetchClientTest >> testEquality [
 
 	#( '42=42' '''abc'' = ''abc''' ) do: [ :each | 

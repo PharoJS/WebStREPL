@@ -38,8 +38,9 @@ window at: #result put: anObject.
 { #category : #evaluating }
 WrFetchClient >> eval [
 
-	self send: inputTextArea value withResponseDo: [ :jsCode | 
-		self eval: jsCode ]
+	self
+		send: self smalltalkCode
+		withResponseDo: [ :jsCode | self eval: jsCode ]
 ]
 
 { #category : #evaluating }
@@ -122,6 +123,12 @@ WrFetchClient >> setupDOM [
 			              (#'background-color' -> #lightgray).
 			              (#padding -> '10px').
 			              (#'min-height' -> '100px') }
+]
+
+{ #category : #accessing }
+WrFetchClient >> smalltalkCode [
+
+	^ inputTextArea value ifEmpty: [ 'nil' ]
 ]
 
 { #category : #initialization }
