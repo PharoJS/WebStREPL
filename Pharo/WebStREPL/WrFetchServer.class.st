@@ -7,10 +7,10 @@ Class {
 	#category : #'WebStREPL-Fetch'
 }
 
-{ #category : #'instance creation' }
+{ #category : #'initialize-release' }
 WrFetchServer >> handleEvaluateRequest: request [
 
-	^ self delegate handleEvaluateRequest: request
+	Author useAuthor: 'WebStREPL' during: [^ self delegate handleEvaluateRequest: request]
 ]
 
 { #category : #accessing }
@@ -19,7 +19,7 @@ WrFetchServer >> handleRequest: request [
 	^ self delegate handleRequest: request
 ]
 
-{ #category : #accessing }
+{ #category : #'initialize-release' }
 WrFetchServer >> initialize [
 
 	| codeGenerator jsExporter |
@@ -33,7 +33,7 @@ WrFetchServer >> initialize [
 	self javascript: jsExporter javascriptCode
 ]
 
-{ #category : #'instance creation' }
+{ #category : #'initialize-release' }
 WrFetchServer >> newServerDelegate [
 
 	| delegate |
@@ -44,7 +44,7 @@ WrFetchServer >> newServerDelegate [
 	^ delegate
 ]
 
-{ #category : #'instance creation' }
+{ #category : #'initialize-release' }
 WrFetchServer >> serverDelegateClass [ 
 	^WrFetchServerDelegate 
 ]

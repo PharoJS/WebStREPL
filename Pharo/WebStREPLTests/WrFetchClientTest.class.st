@@ -91,6 +91,12 @@ WrFetchClientTest >> testEquality [
 ]
 
 { #category : #tests }
+WrFetchClientTest >> testTemporaryAuthorNameSet [
+
+	Author useAuthor: nil during: [ self assert: '4+3' result: '7' ]
+]
+
+{ #category : #tests }
 WrFetchClientTest >> testUI [
 
 	| outputZone |
