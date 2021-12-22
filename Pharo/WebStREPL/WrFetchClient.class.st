@@ -95,21 +95,33 @@ WrFetchClient >> serverUrl: anObject [
 { #category : #initialization }
 WrFetchClient >> setupDOM [
 
-	| title code |
-	title := self addElement: 'h1'.
-	title textContent: 'Smalltalk REPL using PharoJS'.
+	| code resultLabel |
 	inputTextArea := self addElement: 'textarea' style: { 
 			                 (#width -> '100%').
-			                 (#height -> '50px') }.
-	evalButton := self addElement: 'button'.
-	evalButton
-		textContent: 'Eval'.
+			                 (#height -> '50px').
+			                 (#'box-sizing' -> 'border-box') }.
+	inputTextArea placeholder: '"Smalltalk code"'.
+	evalButton := self addElement: 'button' style: { 
+			              (#width -> '140px').
+			              (#height -> '30px').
+			              (#'background-color' -> 'rgb(230,250,255)').
+			              (#color -> 'rgb(51,153,235)').
+			              (#'font-size' -> '1.1em').
+			              (#'border-radius' -> '3px').
+			              ('margin-top' -> '4px') }.
+	evalButton textContent: 'Eval'.
 	evalButton addEventListener: #click block: [ self eval ].
+	resultLabel := self
+		               addElement: 'div'
+		               style: { (#'margin-top' -> '30px') }.
+	resultLabel textContent: 'Result'.
 	code := self addElement: 'code'.
-	outputZone := self
-		              addElement: #pre
-		              to: code
-		              style: { (#width -> '100%') }.
+	outputZone := self addElement: #pre to: code style: { 
+			              (#width -> '100%').
+			              (#'box-sizing' -> 'border-box').
+			              (#'background-color' -> #lightgray).
+			              (#padding -> '10px').
+			              (#'min-height' -> '100px') }
 ]
 
 { #category : #initialization }
