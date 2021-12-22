@@ -30,6 +30,7 @@ WrFetchClient >> displayResult: anObject [
 	anObject ifNil: [ ^ outputZone textContent: 'nil' ].
 	(anObject isString and: [ anObject isEmpty ]) ifTrue: [ 
 		^ outputZone textContent: '<empty string>' ].
+window at: #result put: anObject.
 	outputZone textContent:
 		(String streamContents: [ :s | anObject printOn: s ])
 ]
@@ -43,11 +44,26 @@ WrFetchClient >> eval [
 
 { #category : #evaluating }
 WrFetchClient >> eval: jsCode [
-
+console log: jsCode.
 	(jsCode beginsWith: 'Error:') ifTrue: [ ^ self displayError: jsCode ].
 	[ self displayResult: (window eval: jsCode) value ]
 		on: Error
-		do: [ :ex | self displayError: ex messageText ]
+		do: [ :ex | self displayError: ex description ]
+]
+
+{ #category : #accessing }
+WrFetchClient >> evalButton [ 
+	^evalButton 
+]
+
+{ #category : #accessing }
+WrFetchClient >> inputTextArea [
+	^inputTextArea
+]
+
+{ #category : #accessing }
+WrFetchClient >> outputZone [
+	^outputZone
 ]
 
 { #category : #evaluating }
@@ -84,19 +100,16 @@ WrFetchClient >> setupDOM [
 	title textContent: 'Smalltalk REPL using PharoJS'.
 	inputTextArea := self addElement: 'textarea' style: { 
 			                 (#width -> '100%').
-			                 (#height -> '50px') }. 
-	inputTextArea id: #inputTextArea.
+			                 (#height -> '50px') }.
 	evalButton := self addElement: 'button'.
 	evalButton
-		textContent: 'Eval';
-		id: #evalButton.
+		textContent: 'Eval'.
 	evalButton addEventListener: #click block: [ self eval ].
 	code := self addElement: 'code'.
 	outputZone := self
 		              addElement: #pre
 		              to: code
 		              style: { (#width -> '100%') }.
-	outputZone id: #outputZone
 ]
 
 { #category : #initialization }

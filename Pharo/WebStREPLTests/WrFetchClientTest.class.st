@@ -24,21 +24,43 @@ WrFetchClientTest >> assert: command result: result [
 ]
 
 { #category : #tests }
+WrFetchClientTest >> clickEvalButton [
+
+	^ self evalBlock: [ 
+		  WrFetchClient currentInstance evalButton click ]
+]
+
+{ #category : #tests }
+WrFetchClientTest >> inputText: aString [
+
+	^ self evalBlock: [ 
+		  WrFetchClient currentInstance inputTextArea value: aString ]
+]
+
+{ #category : #tests }
+WrFetchClientTest >> outputText [
+
+	^ self evalBlock: [ WrFetchClient currentInstance outputZone textContent]
+]
+
+{ #category : #tests }
+WrFetchClientTest >> outputText: aString [
+
+	^ self evalBlock: [ 
+		  WrFetchClient currentInstance outputZone textContent: aString ]
+]
+
+{ #category : #tests }
 WrFetchClientTest >> send: aString [
 
-	| responseKey responseHandlingBlock |
-	responseKey := #WebStReplResponse.
-	window at: responseKey put: nil.
-	responseHandlingBlock := self evalBlock: [ 
-		                         [ :jsCode | 
-		                         | jsSideBlock result |
-		                         jsSideBlock := window eval: jsCode.
-		                         result := jsSideBlock value.
-		                         window at: responseKey put: result ] ].
-	app send: aString withResponseDo: responseHandlingBlock.
-	self
-		waitWhile: [ (window at: responseKey) isNil ].
-	^ window at: responseKey
+	| waitForResultString |
+	waitForResultString := '-- wait+For-Result String!!!'.
+	self outputText: waitForResultString.
+	self inputText: aString.
+	self clickEvalButton.
+	self waitWhile: [ 
+		self outputText = waitForResultString ].
+	^ self outputText
 ]
 
 { #category : #tests }
@@ -78,7 +100,8 @@ WrFetchClientTest >> testArithmetics [
 	self assert: '1-2' result: '-1'.
 	self assert: '6 * 7' result: '42'.
 	self assert: '154 / 2' result: '77'.
-
+	self assert: '42/0' result: 'ZeroDivide'.
+	self assert: 'Float infinity' result: 'Float infinity'
 ]
 
 { #category : #tests }
@@ -91,17 +114,24 @@ WrFetchClientTest >> testEquality [
 ]
 
 { #category : #tests }
-WrFetchClientTest >> testTemporaryAuthorNameSet [
+WrFetchClientTest >> testExceptions [
 
-	Author useAuthor: nil during: [ self assert: '4+3' result: '7' ]
+	self assert: 'ZeroDivide signal' result: 'ZeroDivide'.
+	self assert: 'Error signal' result: 'Error'
 ]
 
 { #category : #tests }
-WrFetchClientTest >> testUI [
+WrFetchClientTest >> testStrings [
 
-	| outputZone |
-	(document getElementById: #inputTextArea) textContent: '6 * 7'.
-	(document getElementById: #evalButton) click.
-	outputZone := document getElementById: #outputZone.
-	self waitUntil:  [outputZone textContent trim = '42']
+	self assert: '''Hello''' result: '''Hello'''.
+	self assert: '''Hello Pharo!''' result: '''Hello Pharo!'''.
+	self
+		assert: '''String with ''''quotes'''' around some word'''
+		result: '''String with ''''quotes'''' around some word'''
+]
+
+{ #category : #tests }
+WrFetchClientTest >> testTemporaryAuthorNameSet [
+
+	Author useAuthor: nil during: [ self assert: '4+3' result: '7' ]
 ]
