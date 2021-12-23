@@ -134,7 +134,10 @@ WrFetchClient >> smalltalkCode [
 { #category : #initialization }
 WrFetchClient >> start [
 
+	| hash |
 	super start.
 	self serverUrl: 'repl'.
-	self setupDOM
+	self setupDOM.
+	hash := window unescape: (window location at: #hash) allButFirst.
+	hash = '' ifFalse: [ inputTextArea value: hash. self eval ]
 ]
