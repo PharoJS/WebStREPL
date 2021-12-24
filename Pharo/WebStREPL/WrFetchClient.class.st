@@ -20,22 +20,12 @@ WrFetchClient class >> appJsSubFolder [
 { #category : #initialization }
 WrFetchClient >> addInputArea [
 
-	inputTextArea := self addElement: 'textarea' style: { 
-			                 (#width -> '100%').
-			                 (#height -> '6ex').
-			                 (#'box-sizing' -> 'border-box') }.
-	inputTextArea placeholder: 'Smalltalk code'.
-	evalButton := self addElement: 'button' style: { 
-			              (#width -> '140px').
-			              (#padding -> '5px').
-			              (#'background-color' -> 'rgb(230,250,255)').
-			              (#color -> 'rgb(51,153,235)').
-			              (#'font-size' -> '1.1em').
-			              (#'border-radius' -> '3px')
-			              "('margin-top' -> '4px')" }.
+	inputTextArea := self addElement: 'textarea'.
+	inputTextArea placeholder:
+		'Type in any Smalltalk code, then click the "Eval" button'.
+	evalButton := self addElement: 'button'.
 	evalButton textContent: 'Eval'.
-	evalButton addEventListener: #click block: [ 
-		self eval ]
+	evalButton addEventListener: #click block: [ self eval ]
 ]
 
 { #category : #evaluating }
@@ -48,7 +38,7 @@ WrFetchClient >> displayError: aString [
 { #category : #evaluating }
 WrFetchClient >> displayResult: anObject [
 
-	self outputZone style color: #black.
+	self outputZone.
 	anObject ifNil: [ ^ outputZone textContent: 'nil' ].
 	(anObject isString and: [ anObject isEmpty ]) ifTrue: [ 
 		^ outputZone textContent: '<empty string>' ].
@@ -60,9 +50,17 @@ WrFetchClient >> displayResult: anObject [
 { #category : #evaluating }
 WrFetchClient >> eval [
 
+	| content |
+	content := inputTextArea value.
+	content ifEmpty: [ ^ self ].
 	evalButton parentNode removeChild: evalButton.
+	inputTextArea parentNode removeChild: inputTextArea.
+	inputTextArea := self
+		                 addElement: #div
+		                 .
+	inputTextArea textContent: content.
 	self
-		send: self smalltalkCode
+		send: content
 		withResponseDo: [ :jsCode | 
 			self eval: jsCode.
 			self addInputArea ]
@@ -99,12 +97,7 @@ WrFetchClient >> outputZone [
 
 	| code |
 	code := self addElement: 'code'.
-	outputZone := self addElement: #pre to: code style: { 
-			              (#width -> '100%').
-			              (#'box-sizing' -> 'border-box').
-			              (#'background-color' -> #lightgray).
-			              (#padding -> '10px').
-			              "(#'min-height' -> '100px')" }.
+	outputZone := self addElement: #pre to: code.
 	^ outputZone
 ]
 
