@@ -18,7 +18,7 @@ WrFetchCodeGenerator >> html [
 <style>
 body{padding:2px}
 h1{margin-top:2px}
-textarea,div{font-family: Monaco, "Lucida Console", monospace}
+textarea,div,pre{font-family: Monaco, "Lucida Console", monospace;font-size: 1em}
 textarea{width: 30em; height: 6ex; box-sizing: border-box}
 button{min-width: 6em; padding: 5px; background-color: rgb(230, 250, 255); color: rgb(51, 153, 235); font-size: 1.1em; border-radius: 3px}
 pre{box-sizing: border-box; background-color: lightgray; padding: 10px; min-width: 30px}
