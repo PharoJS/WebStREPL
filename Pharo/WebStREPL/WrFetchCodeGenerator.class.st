@@ -29,7 +29,7 @@ pre{box-sizing: border-box; background-color: lightgray; padding: 10px; min-widt
 		<a href="http://pharojs.org"><img alt="PharoJS Logo" src="https://pharojs.org/img/pharoJsBicolorLogo2016-08-12.png" style="width:200px;"></a>
 		<h1>Smalltalk REPL using PharoJS</h1>
     </div>
-	<script src="index.js"></script>
+	<script src="repl/index.js"></script>
 </body>
 </html>'
 ]

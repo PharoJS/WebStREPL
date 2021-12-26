@@ -35,6 +35,12 @@ WrFetchServerDelegate >> handleEvaluateRequest: request [
 	^ ZnResponse ok: (ZnEntity text: jsCode)
 ]
 
+{ #category : #public }
+WrFetchServerDelegate >> handleRequest: request [
+	[ request uri firstPathSegment = '' ] whileTrue: [ request uri removeFirstPathSegment ].
+	^ super handleRequest: request
+]
+
 { #category : #handling }
 WrFetchServerDelegate >> transpile: stCode [
 

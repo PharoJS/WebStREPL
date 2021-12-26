@@ -137,7 +137,7 @@ WrFetchClient >> start [
 
 	| hash |
 	super start.
-	self serverUrl: 'repl'.
+	self serverUrl: 'repl/repl'.
 	self addInputArea.
 	hash := window unescape: (window location at: #hash) allButFirst.
 	hash = '' ifFalse: [ inputTextArea value: hash. self eval ]
