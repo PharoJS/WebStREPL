@@ -7,8 +7,16 @@ Class {
 		'serverUrl',
 		'evalButton'
 	],
+	#classVars : [
+		'TranscriptElement'
+	],
 	#category : #'WebStREPL-Fetch'
 }
+
+{ #category : #adding }
+WrFetchClient class >> addToTranscript: aString [
+	TranscriptElement innerText: TranscriptElement innerText , aString
+]
 
 { #category : #description }
 WrFetchClient class >> appJsSubFolder [
@@ -55,10 +63,9 @@ WrFetchClient >> eval [
 	content := inputTextArea value.
 	content ifEmpty: [ ^ self ].
 	evalButton parentNode removeChild: evalButton.
+	TranscriptElement := self addElement: 'pre'.
 	inputTextArea parentNode removeChild: inputTextArea.
-	inputTextArea := self
-		                 addElement: #div
-		                 .
+	inputTextArea := self addElement: #pre.
 	inputTextArea textContent: content.
 	self
 		send: content
@@ -100,6 +107,7 @@ WrFetchClient >> outputZone [
 	| code |
 	code := self addElement: 'code'.
 	outputZone := self addElement: #pre to: code.
+	self cssClassesElement: outputZone set: #( output ).
 	^ outputZone
 ]
 

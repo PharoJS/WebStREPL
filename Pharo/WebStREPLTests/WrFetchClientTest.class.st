@@ -15,6 +15,31 @@ WrFetchClientTest class >> appClass [
 ]
 
 { #category : #tests }
+WrFetchClientTest class >> ignoreClasses [
+
+	^ { 
+		  WrFetchClient.
+		  PjWebApplication.
+		  PjBrowserGlobals.
+		  PjDOMApplication.
+		  PjDomGlobals.
+		  PjApplication.
+		  PjUniversalGlobals.
+		  PjSharedPool.
+		  PjMaterializer.
+		  PjDomController.
+		  PjRectangle.
+		  Date.
+		  PjMagnitude.
+		  ArithmeticError.
+		  PjProxyInfo.
+		  PjSortedCollection.
+		  PjCollection.
+		  PjStringStream.
+		  PjLookupKey. GeometryError . GeometryObject . Point }
+]
+
+{ #category : #tests }
 WrFetchClientTest >> assert: command result: result [
 
 	| response responseForComparison |
@@ -28,6 +53,11 @@ WrFetchClientTest >> clickEvalButton [
 
 	^ self evalBlock: [ 
 		  WrFetchClient currentInstance evalButton click ]
+]
+
+{ #category : #tests }
+WrFetchClientTest >> ignoreClasses [
+	^ self class ignoreClasses
 ]
 
 { #category : #tests }
@@ -140,4 +170,13 @@ WrFetchClientTest >> testStrings [
 WrFetchClientTest >> testTemporaryAuthorNameSet [
 
 	Author useAuthor: nil during: [ self assert: '4+3' result: '7' ]
+]
+
+{ #category : #tests }
+WrFetchClientTest >> testTranscript [
+
+	| jsCode |
+	jsCode := WrFetchServerDelegate new
+		          transpile: 'Transcript show: ''hello'''
+		          ignoringClasses: self ignoreClasses
 ]

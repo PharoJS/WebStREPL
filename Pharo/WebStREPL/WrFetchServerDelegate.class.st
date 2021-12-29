@@ -44,11 +44,18 @@ WrFetchServerDelegate >> handleRequest: request [
 { #category : #handling }
 WrFetchServerDelegate >> transpile: stCode [
 
+	^ self transpile: stCode ignoringClasses: #()
+]
+
+{ #category : #handling }
+WrFetchServerDelegate >> transpile: stCode ignoringClasses: classesToIgnore [
+
 	| someClass classesToSkip |
 	[ 
 	someClass := Class new.
 	someClass class compile: 'replMethod ^[' , stCode , ']'.
-	classesToSkip := PjExporter bootstrapClasses collect: [ : each | each classToUseForJsConversion ].
+	classesToSkip := (PjExporter bootstrapClasses collect: [ :each | 
+		                 each classToUseForJsConversion ]), classesToIgnore.
 	^ PjDependentTranspiler new
 		  pharoJsSelectorPrefix: 'pj_';
 		  alreadyConvertedClasses: classesToSkip;
