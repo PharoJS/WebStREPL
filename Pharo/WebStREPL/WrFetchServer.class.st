@@ -2,10 +2,26 @@ Class {
 	#name : #WrFetchServer,
 	#superclass : #PjBridgeServer,
 	#instVars : [
-		'replRequestHandler'
+		'replRequestHandler',
+		'alreadyClasses'
+	],
+	#classVars : [
+		'AlreadyClasses',
+		'GeneratingTranspiler'
 	],
 	#category : #'WebStREPL-Fetch'
 }
+
+{ #category : #accessing }
+WrFetchServer class >> alreadyClasses [
+	^ AlreadyClasses
+]
+
+{ #category : #accessing }
+WrFetchServer class >> generatingTranspilerCopy [
+
+^ GeneratingTranspiler copy
+]
 
 { #category : #'initialize-release' }
 WrFetchServer >> handleEvaluateRequest: request [
@@ -30,7 +46,9 @@ WrFetchServer >> initialize [
 	self html: codeGenerator html.
 	jsExporter := PjExporter new.
 	jsExporter initializeWithAppClass: WrFetchClient.
-	self javascript: jsExporter javascriptCode
+	self javascript: jsExporter javascriptCode.
+	GeneratingTranspiler := jsExporter transpiler.
+
 ]
 
 { #category : #'initialize-release' }
@@ -39,7 +57,7 @@ WrFetchServer >> newServerDelegate [
 	| delegate |
 	delegate := super newServerDelegate.
 	delegate
-		map: #repl
+		map: WrFetchClient compileTag
 		to: [ :request | self handleEvaluateRequest: request ].
 	^ delegate
 ]

@@ -18,9 +18,16 @@ ThreadSafeTranscript >> javascriptIsExportableClass [
 ]
 
 { #category : #'*WebStREPL' }
+ThreadSafeTranscript >> javascriptName [
+
+	^ 'Transcript'
+]
+
+{ #category : #'*WebStREPL' }
 ThreadSafeTranscript >> nameToUseForJsConversion [
 
-	^ 'WrThread'
+" this is here because we want an *instance* of ThreadSafeTranscript to act like a class for PharoJS "
+	^ 'Transcript'
 ]
 
 { #category : #'*WebStREPL' }

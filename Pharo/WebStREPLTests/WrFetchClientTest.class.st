@@ -111,9 +111,9 @@ WrFetchClientTest >> setUp [
 	server := self serverClass new.
 	server start.
 	self bridge server znServer delegate
-		map: #repl
+		map: WrFetchClient compileTag
 		to: [ :request | self server handleRequest: request ].
-	app serverUrl: (self bridge serverUrl / 'repl') asString
+	app serverUrl: (self bridge serverUrl / WrFetchClient compileTag) asString
 ]
 
 { #category : #tests }
@@ -178,5 +178,4 @@ WrFetchClientTest >> testTranscript [
 	| jsCode |
 	jsCode := WrFetchServerDelegate new
 		          transpile: 'Transcript show: ''hello'''
-		          ignoringClasses: self ignoreClasses
 ]

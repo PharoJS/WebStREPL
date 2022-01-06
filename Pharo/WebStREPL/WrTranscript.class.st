@@ -1,6 +1,8 @@
 Class {
 	#name : #WrTranscript,
 	#superclass : #Object,
+	#traits : 'PjTExtensionClass',
+	#classTraits : 'PjTExtensionClass classTrait',
 	#classInstVars : [
 		'element'
 	],

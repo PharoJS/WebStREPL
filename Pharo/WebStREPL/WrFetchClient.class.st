@@ -19,10 +19,21 @@ WrFetchClient class >> addToTranscript: aString [
 ]
 
 { #category : #description }
+WrFetchClient class >> appClasses [
+<pharoJsSkip>
+	^ super appClasses , { WrTranscript }
+]
+
+{ #category : #description }
 WrFetchClient class >> appJsSubFolder [
 
 	<pharoJsSkip>
 	^ 'js'
+]
+
+{ #category : #compiling }
+WrFetchClient class >> compileTag [
+	^ #compile
 ]
 
 { #category : #initialization }
@@ -47,6 +58,11 @@ WrFetchClient >> displayError: aString [
 { #category : #evaluating }
 WrFetchClient >> displayResult: anObject [
 
+	TranscriptElement textContent = '' ifTrue: [
+			TranscriptElement parentNode removeChild: TranscriptElement.
+	] ifFalse: [
+		anObject = WrTranscript ifTrue: [ ^ self ]
+	].
 	self outputZone.
 	anObject ifNil: [ ^ outputZone textContent: 'nil' ].
 	(anObject isString and: [ anObject isEmpty ]) ifTrue: [ 
@@ -63,10 +79,10 @@ WrFetchClient >> eval [
 	content := inputTextArea value.
 	content ifEmpty: [ ^ self ].
 	evalButton parentNode removeChild: evalButton.
-	TranscriptElement := self addElement: 'pre'.
 	inputTextArea parentNode removeChild: inputTextArea.
 	inputTextArea := self addElement: #pre.
 	inputTextArea textContent: content.
+	TranscriptElement := self addElement: 'pre'.
 	self
 		send: content
 		withResponseDo: [ :jsCode | 
@@ -142,13 +158,15 @@ WrFetchClient >> smalltalkCode [
 	^ inputTextArea value ifEmpty: [ 'nil' ]
 ]
 
-{ #category : #initialization }
+{ #category : #'start-stop' }
 WrFetchClient >> start [
 
 	| hash |
 	super start.
-	self serverUrl: 'repl/repl'.
+	self serverUrl: 'repl/' , self class compileTag.
 	self addInputArea.
 	hash := window unescape: (window location at: #hash) allButFirst.
-	hash = '' ifFalse: [ inputTextArea value: hash. self eval ]
+	hash = '' ifTrue: [ ^ self ].
+	inputTextArea value: hash.
+	self eval
 ]

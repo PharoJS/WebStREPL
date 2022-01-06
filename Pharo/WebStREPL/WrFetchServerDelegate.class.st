@@ -37,30 +37,25 @@ WrFetchServerDelegate >> handleEvaluateRequest: request [
 
 { #category : #public }
 WrFetchServerDelegate >> handleRequest: request [
-	[ request uri firstPathSegment = '' ] whileTrue: [ request uri removeFirstPathSegment ].
+
+	request uri firstPathSegment = 'repl' ifTrue: [ 
+		request uri removeFirstPathSegment ].
+	[ 
+	request uri firstPathSegment = '' ] whileTrue: [ 
+		request uri removeFirstPathSegment ].
 	^ super handleRequest: request
 ]
 
 { #category : #handling }
 WrFetchServerDelegate >> transpile: stCode [
 
-	^ self transpile: stCode ignoringClasses: #()
-]
-
-{ #category : #handling }
-WrFetchServerDelegate >> transpile: stCode ignoringClasses: classesToIgnore [
-
-	| someClass classesToSkip |
+	| someClass |
 	[ 
 	someClass := Class new.
 	someClass class compile: 'replMethod ^[' , stCode , ']'.
-	classesToSkip := (PjExporter bootstrapClasses collect: [ :each | 
-		                 each classToUseForJsConversion ]), classesToIgnore.
-	^ PjDependentTranspiler new
-		  pharoJsSelectorPrefix: 'pj_';
-		  alreadyConvertedClasses: classesToSkip;
-		  addAlreadyDefinedClasses: classesToSkip;
+	^ WrFetchServer generatingTranspilerCopy
 		  convertToJs: someClass replMethod ]
 		on: Exception
 		do: [ :ex | ^ 'Error: ' , ex printString ]
+	"^ self transpile: stCode ignoringClasses: { PjCore }"
 ]

@@ -11,3 +11,8 @@ Class {
 ManifestWebStREPL class >> ruleSentNotImplementedRuleV1FalsePositive [
 	^ #(#(#(#RGClassDefinition #(#WrFetchClient)) #'2021-12-23T12:44:15.389672-05:00') )
 ]
+
+{ #category : #'code-critics' }
+ManifestWebStREPL class >> ruleUtilityMethodsRuleV1FalsePositive [
+	^ #(#(#(#RGClassDefinition #(#WrFetchServerDelegate)) #'2021-12-31T15:15:33.760092-05:00') )
+]
