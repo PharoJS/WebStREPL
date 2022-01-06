@@ -12,8 +12,7 @@ Class {
 { #category : #visibility }
 WrTranscript class >> cr [
 
-	self show: '
-'
+	self show: 13 asCharacter
 ]
 
 { #category : #visibility }

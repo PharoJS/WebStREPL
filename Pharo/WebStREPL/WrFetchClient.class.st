@@ -5,7 +5,8 @@ Class {
 		'outputZone',
 		'inputTextArea',
 		'serverUrl',
-		'evalButton'
+		'evalButton',
+		'transcriptDiv'
 	],
 	#classVars : [
 		'TranscriptElement'
@@ -37,6 +38,22 @@ WrFetchClient class >> compileTag [
 ]
 
 { #category : #initialization }
+WrFetchClient >> addElement: tagString class: classString [
+	^ self addElement: tagString to: self body class: classString
+]
+
+{ #category : #initialization }
+WrFetchClient >> addElement: tagString to: parentNode class: classString [
+
+	| newElement |
+	newElement := self
+		              createElement: tagString.
+	parentNode appendChild: newElement.
+	newElement className: classString.
+	^ newElement
+]
+
+{ #category : #initialization }
 WrFetchClient >> addInputArea [
 
 	inputTextArea := self addElement: 'textarea'.
@@ -58,11 +75,10 @@ WrFetchClient >> displayError: aString [
 { #category : #evaluating }
 WrFetchClient >> displayResult: anObject [
 
-	TranscriptElement textContent = '' ifTrue: [
-			TranscriptElement parentNode removeChild: TranscriptElement.
-	] ifFalse: [
-		anObject = WrTranscript ifTrue: [ ^ self ]
-	].
+	TranscriptElement textContent = ''
+		ifTrue: [ 
+		transcriptDiv parentNode removeChild: transcriptDiv ]
+		ifFalse: [ anObject = WrTranscript ifTrue: [ ^ self ] ].
 	self outputZone.
 	anObject ifNil: [ ^ outputZone textContent: 'nil' ].
 	(anObject isString and: [ anObject isEmpty ]) ifTrue: [ 
@@ -80,9 +96,16 @@ WrFetchClient >> eval [
 	content ifEmpty: [ ^ self ].
 	evalButton parentNode removeChild: evalButton.
 	inputTextArea parentNode removeChild: inputTextArea.
-	inputTextArea := self addElement: #pre.
+	inputTextArea := self addElement: #pre class: #input.
 	inputTextArea textContent: content.
-	TranscriptElement := self addElement: 'pre'.
+	inputTextArea title: 'input'.
+	transcriptDiv := self addElement: 'div' class: #transcript.
+	transcriptDiv innerText: 'Transcript'.
+	TranscriptElement := self
+		                     addElement: 'pre'
+		                     to: transcriptDiv
+		                     class: #transcript.
+	TranscriptElement title: 'Transcript'.
 	self
 		send: content
 		withResponseDo: [ :jsCode | 
@@ -115,15 +138,11 @@ WrFetchClient >> inputTextArea [
 { #category : #accessing }
 WrFetchClient >> outputZone [
 
-	"resultLabel := self
-		               addElement: 'div'
-		               style: { (#'margin-top' -> '30px') }.
-	resultLabel textContent: 'Result'."
-
 	| code |
 	code := self addElement: 'code'.
-	outputZone := self addElement: #pre to: code.
-	self cssClassesElement: outputZone set: #( output ).
+	outputZone := self addElement: #pre to: code class: #output.
+	outputZone title: 'result'.
+"	self cssClassesElement: outputZone set: #( output )."
 	^ outputZone
 ]
 

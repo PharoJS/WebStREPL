@@ -18,10 +18,13 @@ WrFetchCodeGenerator >> html [
 <style>
 body{padding:2px}
 h1{margin-top:2px}
-textarea,div,pre{font-family: Monaco, "Lucida Console", monospace;font-size: 1em}
-textarea{width: 30em; height: 6ex; box-sizing: border-box}
+textarea,div,pre{font-family: Monaco, "Lucida Console", monospace;font-size: 1em; box-sizing: border-box; margin: 0.5em 0px}
+textarea{width: 30em; height: 6ex}
 button{min-width: 6em; padding: 5px; background-color: rgb(230, 250, 255); color: rgb(51, 153, 235); font-size: 1.1em; border-radius: 3px}
-pre.output{box-sizing: border-box; background-color: lightgray; padding: 10px; min-width: 30px}
+pre.input{margin-top: 1.5em}
+pre.output{background-color: rgb(200,200,200); padding: 5px; min-width: 30px}
+.transcript{background-color: rgb(230,230,230)}
+pre.transcript{margin-top: 0; padding: 5px; min-width: 30px; border: thin solid black}
 </style>
  </head>
 <body>
