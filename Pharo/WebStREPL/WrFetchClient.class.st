@@ -59,9 +59,20 @@ WrFetchClient >> addInputArea [
 	inputTextArea := self addElement: 'textarea'.
 	inputTextArea placeholder:
 		'Type in any Smalltalk code, then click the "Eval" button'.
+		inputTextArea focus.
 	evalButton := self addElement: 'button'.
+	inputTextArea addEventListener: #keydown block: [ :event | 
+		event keyCode = 9 ifTrue: [ " make tab work properly in Safari "
+			evalButton focus.
+			event stopPropagation.
+			event preventDefault.
+			false ] ].
 	evalButton textContent: 'Eval'.
+	evalButton type: #button.
 	evalButton addEventListener: #click block: [ self eval ].
+	evalButton addEventListener: #keypress block: [ :event | 
+		event preventDefault.
+		event keyCode = 13 ifTrue: [ self eval ] ].
 	inputTextArea focus
 ]
 
