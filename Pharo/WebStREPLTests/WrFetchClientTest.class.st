@@ -68,29 +68,21 @@ WrFetchClientTest >> inputText: aString [
 ]
 
 { #category : #tests }
-WrFetchClientTest >> outputText [
-
-	^ self evalBlock: [ WrFetchClient currentInstance outputZone textContent]
-]
-
-{ #category : #tests }
-WrFetchClientTest >> outputText: aString [
+WrFetchClientTest >> outputZone [
 
 	^ self evalBlock: [ 
-		  WrFetchClient currentInstance outputZone textContent: aString ]
+		  WrFetchClient currentInstance outputZone]
 ]
 
 { #category : #tests }
 WrFetchClientTest >> send: aString [
 
-	| waitForResultString |
-	waitForResultString := '-- wait+For-Result String!!!'.
-	self outputText: waitForResultString.
+	| initialOutputZone |
+	initialOutputZone := self outputZone.
 	self inputText: aString.
 	self clickEvalButton.
-	self waitWhile: [ 
-		self outputText = waitForResultString ].
-	^ self outputText
+	self waitWhile: [ self outputZone == initialOutputZone ].
+	^ self outputZone textContent
 ]
 
 { #category : #tests }
@@ -113,7 +105,8 @@ WrFetchClientTest >> setUp [
 	self bridge server znServer delegate
 		map: WrFetchClient compileTag
 		to: [ :request | self server handleRequest: request ].
-	app serverUrl: (self bridge serverUrl / WrFetchClient compileTag) asString
+	app serverUrl:
+		(self bridge serverUrl / WrFetchClient compileTag) asString
 ]
 
 { #category : #tests }
@@ -137,7 +130,20 @@ WrFetchClientTest >> testArithmetics [
 { #category : #tests }
 WrFetchClientTest >> testEmptyInput [
 
-	self assert: '' result: 'nil'
+	{ ''. Character space. Character tab. } do: [ : each | 
+		self assert: each asString result: 'nil'
+	]
+
+]
+
+{ #category : #tests }
+WrFetchClientTest >> testEnsureChangeFileIsUnchanged [
+	| changesFile initialChangeSize |
+	changesFile := Smalltalk changesName asFileReference.
+	initialChangeSize := changesFile size.
+	self assert: '1+2' result: '3'.
+	self assert: changesFile size equals: initialChangeSize.
+
 ]
 
 { #category : #tests }

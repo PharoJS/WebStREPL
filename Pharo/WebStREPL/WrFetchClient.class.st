@@ -76,10 +76,21 @@ WrFetchClient >> addInputArea [
 	inputTextArea focus
 ]
 
+{ #category : #accessing }
+WrFetchClient >> createOutputZone [
+
+	| code |
+	code := self addElement: 'code'.
+	outputZone := self addElement: #pre to: code class: #output.
+	outputZone title: 'result'.
+	^ outputZone
+]
+
 { #category : #evaluating }
 WrFetchClient >> displayError: aString [
 
-	self outputZone style color: #red.
+	self createOutputZone.
+	outputZone style color: #red.
 	outputZone textContent: aString
 ]
 
@@ -91,7 +102,7 @@ WrFetchClient >> displayResult: anObject [
 		ifFalse: [ 
 			transcriptDiv className: #transcript.
 			anObject = WrTranscript ifTrue: [ ^ self ] ].
-	self outputZone.
+	self createOutputZone.
 	anObject ifNil: [ ^ outputZone textContent: 'nil' ].
 	(anObject isString and: [ anObject isEmpty ]) ifTrue: [ 
 		^ outputZone textContent: '<empty string>' ].
@@ -105,9 +116,7 @@ WrFetchClient >> eval [
 
 	| content |
 	content := inputTextArea value.
-	content ifEmpty: [ ^ self ].
-	evalButton parentNode removeChild: evalButton.
-	inputTextArea parentNode removeChild: inputTextArea.
+	{ evalButton. inputTextArea } do: [ : each | each parentNode removeChild: each ].
 	inputTextArea := self addElement: #pre class: #input.
 	inputTextArea textContent: content.
 	inputTextArea title: 'input'.
@@ -131,10 +140,11 @@ WrFetchClient >> eval [
 { #category : #evaluating }
 WrFetchClient >> eval: jsCode [
 
+console log: jsCode.
 	(jsCode beginsWith: 'Error:') ifTrue: [ ^ self displayError: jsCode ].
 	[ self displayResult: (window eval: jsCode) value ]
 		on: Error
-		do: [ :ex | self displayError: ex message ]
+		do: [ :ex | self displayError: ex description ]
 ]
 
 { #category : #accessing }
@@ -150,12 +160,7 @@ WrFetchClient >> inputTextArea [
 { #category : #accessing }
 WrFetchClient >> outputZone [
 
-	| code |
-	code := self addElement: 'code'.
-	outputZone := self addElement: #pre to: code class: #output.
-	outputZone title: 'result'.
-"	self cssClassesElement: outputZone set: #( output )."
-	^ outputZone
+	^ outputZone ifNil: [ self createOutputZone ]
 ]
 
 { #category : #evaluating }

@@ -30,10 +30,9 @@ WrFetchServerDelegate >> evaluate: string [
 { #category : #handling }
 WrFetchServerDelegate >> handleEvaluateRequest: request [
 
-	| jsCode |
-	Transcript crShow: 'start compile:' , DateAndTime now asString.
-	jsCode := self transpile: request entity contents.
-	Transcript crShow: 'end compile:' , DateAndTime now asString.
+	| jsCode stCode |
+	stCode := self stCodeFromRequest: request.
+	jsCode := self transpile: stCode.
 	^ ZnResponse ok: (ZnEntity text: jsCode)
 ]
 
@@ -49,15 +48,23 @@ WrFetchServerDelegate >> handleRequest: request [
 ]
 
 { #category : #handling }
+WrFetchServerDelegate >> stCodeFromRequest: request [
+
+	request entity ifNil: [ ^ '' ].
+	^ request entity contents
+]
+
+{ #category : #handling }
 WrFetchServerDelegate >> transpile: stCode [
 
-	| someClass |
+	| method block|
 	[ 
-	someClass := Class new.
-	someClass class compile: 'replMethod ^[' , stCode , ']'.
-	^ WrFetchServer generatingTranspilerCopy
-		  convertToJs: someClass replMethod ]
+	method := OpalCompiler new
+		         source: '[' , stCode , ']';
+		         noPattern: true;
+		         compileDoit.
+	block := nil executeMethod: method.
+	^ WrFetchServer generatingTranspilerCopy convertToJs: block ]
 		on: Exception
 		do: [ :ex | ^ 'Error: ' , ex printString ]
-	"^ self transpile: stCode ignoringClasses: { PjCore }"
 ]

@@ -1,21 +1,11 @@
 Class {
 	#name : #WrFetchServer,
 	#superclass : #PjBridgeServer,
-	#instVars : [
-		'replRequestHandler',
-		'alreadyClasses'
-	],
 	#classVars : [
-		'AlreadyClasses',
 		'GeneratingTranspiler'
 	],
 	#category : #'WebStREPL-Fetch'
 }
-
-{ #category : #accessing }
-WrFetchServer class >> alreadyClasses [
-	^ AlreadyClasses
-]
 
 { #category : #accessing }
 WrFetchServer class >> generatingTranspilerCopy [
