@@ -23,6 +23,7 @@ textarea{width: 30em; height: 6ex}
 button{min-width: 6em; padding: 5px; background-color: rgb(230, 250, 255); color: rgb(51, 153, 235); font-size: 1.1em; border-radius: 3px}
 pre.input{margin-top: 1.5em}
 pre.output{background-color: rgb(200,200,200); padding: 5px; min-width: 30px}
+.hiddenTranscript{display:none}
 .transcript{background-color: rgb(230,230,230)}
 pre.transcript{margin-top: 0; padding: 5px; min-width: 30px; border: thin solid black}
 </style>

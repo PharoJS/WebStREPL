@@ -87,9 +87,10 @@ WrFetchClient >> displayError: aString [
 WrFetchClient >> displayResult: anObject [
 
 	TranscriptElement textContent = ''
-		ifTrue: [ 
-		transcriptDiv parentNode removeChild: transcriptDiv ]
-		ifFalse: [ anObject = WrTranscript ifTrue: [ ^ self ] ].
+		ifTrue: [ transcriptDiv parentNode removeChild: transcriptDiv ]
+		ifFalse: [ 
+			transcriptDiv className: #transcript.
+			anObject = WrTranscript ifTrue: [ ^ self ] ].
 	self outputZone.
 	anObject ifNil: [ ^ outputZone textContent: 'nil' ].
 	(anObject isString and: [ anObject isEmpty ]) ifTrue: [ 
@@ -110,7 +111,7 @@ WrFetchClient >> eval [
 	inputTextArea := self addElement: #pre class: #input.
 	inputTextArea textContent: content.
 	inputTextArea title: 'input'.
-	transcriptDiv := self addElement: 'div' class: #transcript.
+	transcriptDiv := self addElement: 'div' class: #hiddenTranscript.
 	transcriptDiv innerText: 'Transcript'.
 	TranscriptElement := self
 		                     addElement: 'pre'

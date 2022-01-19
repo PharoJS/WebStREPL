@@ -31,7 +31,9 @@ WrFetchServerDelegate >> evaluate: string [
 WrFetchServerDelegate >> handleEvaluateRequest: request [
 
 	| jsCode |
+	Transcript crShow: 'start compile:' , DateAndTime now asString.
 	jsCode := self transpile: request entity contents.
+	Transcript crShow: 'end compile:' , DateAndTime now asString.
 	^ ZnResponse ok: (ZnEntity text: jsCode)
 ]
 
