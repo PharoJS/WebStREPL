@@ -58,7 +58,7 @@ WrFetchClient >> addInputArea [
 
 	inputTextArea := self addElement: 'textarea'.
 	inputTextArea placeholder:
-		'Type in any Smalltalk code, then click the "Eval" button'.
+		'Your Smalltalk code here'.
 		inputTextArea focus.
 	evalButton := self addElement: 'button'.
 	inputTextArea addEventListener: #keydown block: [ :event | 
@@ -140,7 +140,6 @@ WrFetchClient >> eval [
 { #category : #evaluating }
 WrFetchClient >> eval: jsCode [
 
-console log: jsCode.
 	(jsCode beginsWith: 'Error:') ifTrue: [ ^ self displayError: jsCode ].
 	[ self displayResult: (window eval: jsCode) value ]
 		on: Error

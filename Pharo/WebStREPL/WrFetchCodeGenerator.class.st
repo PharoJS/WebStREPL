@@ -19,8 +19,11 @@ WrFetchCodeGenerator >> html [
 body{padding:2px}
 h1{margin-top:2px}
 textarea,div,pre{font-family: Monaco, "Lucida Console", monospace;font-size: 1em; box-sizing: border-box; margin: 0.5em 0px}
-textarea{width: 30em; height: 6ex}
-button{min-width: 6em; padding: 5px; background-color: rgb(230, 250, 255); color: rgb(51, 153, 235); font-size: 1.1em; border-radius: 3px}
+textarea{width: 30em; height: 6ex; vertical-align:middle;}
+button{min-width: 6em; padding: 5px; color: rgb(230, 250, 255); background-color: rgb(51, 153, 235); font-size: 1.1em; border-radius: 3px; border-color: rgb(51, 153, 235); margin-left:10px;}
+button:hover, button:focus{
+background-color: rgb(230, 250, 255); color: rgb(51, 153, 235);
+}
 pre.input{margin-top: 1.5em}
 pre.output{background-color: rgb(200,200,200); padding: 5px; min-width: 30px}
 .hiddenTranscript{display:none}
