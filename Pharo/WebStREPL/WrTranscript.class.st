@@ -12,7 +12,15 @@ Class {
 { #category : #visibility }
 WrTranscript class >> cr [
 
-	self show: 13 asCharacter
+	self show: 10 asCharacter asString
+]
+
+{ #category : #visibility }
+WrTranscript class >> crShow: anObject [
+
+	self cr.
+		self show: anObject.
+
 ]
 
 { #category : #visibility }
@@ -23,6 +31,13 @@ WrTranscript class >> show: anObject [
 
 { #category : #visibility }
 WrTranscript class >> showLf: anObject [
+
+	self show: anObject.
+	self cr
+]
+
+{ #category : #visibility }
+WrTranscript class >> showlf: anObject [
 
 	self show: anObject.
 	self cr

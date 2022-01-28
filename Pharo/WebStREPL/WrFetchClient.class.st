@@ -16,13 +16,15 @@ Class {
 
 { #category : #adding }
 WrFetchClient class >> addToTranscript: aString [
-	TranscriptElement innerText: TranscriptElement innerText , aString
+
+	TranscriptElement textContent: TranscriptElement textContent , aString
 ]
 
 { #category : #description }
 WrFetchClient class >> appClasses [
-<pharoJsSkip>
-	^ super appClasses , { WrTranscript }
+
+	<pharoJsSkip>
+	^ super appClasses , { WrTranscript . PjSymbol . PjCharacter }
 ]
 
 { #category : #description }
@@ -106,7 +108,6 @@ WrFetchClient >> displayResult: anObject [
 	anObject ifNil: [ ^ outputZone textContent: 'nil' ].
 	(anObject isString and: [ anObject isEmpty ]) ifTrue: [ 
 		^ outputZone textContent: '<empty string>' ].
-	window at: #result put: anObject.
 	outputZone textContent:
 		(String streamContents: [ :s | anObject printOn: s ])
 ]
@@ -116,12 +117,14 @@ WrFetchClient >> eval [
 
 	| content |
 	content := inputTextArea value.
-	{ evalButton. inputTextArea } do: [ : each | each parentNode removeChild: each ].
+	{ 
+		evalButton.
+		inputTextArea } do: [ :each | each parentNode removeChild: each ].
 	inputTextArea := self addElement: #pre class: #input.
 	inputTextArea textContent: content.
 	inputTextArea title: 'input'.
 	transcriptDiv := self addElement: 'div' class: #hiddenTranscript.
-	transcriptDiv innerText: 'Transcript'.
+	transcriptDiv textContent: 'Transcript'.
 	TranscriptElement := self
 		                     addElement: 'pre'
 		                     to: transcriptDiv
