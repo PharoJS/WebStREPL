@@ -1,3 +1,6 @@
+"
+I represent Characters. Currently I am a sub-class of PjString, but that's probably wrong.
+"
 Class {
 	#name : #PjCharacter,
 	#superclass : #WrString,

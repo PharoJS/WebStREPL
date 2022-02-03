@@ -1,3 +1,6 @@
+"
+I represent Symbols, and have the differences from PjString (which I otherwise mostly am).
+"
 Class {
 	#name : #PjSymbol,
 	#superclass : #WrString,

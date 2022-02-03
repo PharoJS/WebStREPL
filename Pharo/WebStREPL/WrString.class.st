@@ -1,3 +1,6 @@
+"
+I am a bridge class. My purpose is to hold methods that should be migrated up to PjString in a refactoring.
+"
 Class {
 	#name : #WrString,
 	#superclass : #PjString,
