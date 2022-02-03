@@ -1,11 +1,22 @@
 Class {
 	#name : #PjSymbol,
-	#superclass : #PjString,
+	#superclass : #WrString,
 	#instVars : [
 		'string'
 	],
 	#category : #'WebStREPL-PharoJS'
 }
+
+{ #category : #'pharoJs support' }
+PjSymbol class >> jsTranspilationImportMethods [
+
+	<pharoJsSkip>
+	^ { 
+		  (Symbol
+		   ->
+			   #( at:put: storeOn: errorNoModification ))
+			}
+]
 
 { #category : #'instance creation' }
 PjSymbol class >> new [
@@ -18,13 +29,9 @@ PjSymbol class >> with: aString [
 	^ self new with: aString
 ]
 
-{ #category : #converting }
-PjSymbol >> _valueOf [
-
-	" I implement the valueOf method so that references to me as a raw string will work properly 
-	  This requires changes to the exporter to remove the standard prefix and the _ to look like a standard Javascript method "
-
-	^ string asString
+{ #category : #copying }
+PjSymbol >> , other [
+	^ self class with: string,other
 ]
 
 { #category : #converting }
@@ -36,21 +43,29 @@ PjSymbol >> asJsObject [
 { #category : #converting }
 PjSymbol >> asString [
 
-	^ string asString
-	
+	<jsAlias: 'toString'>
+	^ string valueOf
+]
+
+{ #category : #accessing }
+PjSymbol >> at: anInteger [
+
+	^ string at: anInteger
 ]
 
 { #category : #testing }
-PjSymbol >> isEmpty [
-	^ string = ''
+PjSymbol >> isLiteralSymbol [
+	^ true
 ]
 
-{ #category : #printing }
-PjSymbol >> printOn: aStream [
+{ #category : #converting }
+PjSymbol >> valueOf [
 
-	aStream
-		nextPutAll: '#';
-		nextPutAll: string
+	" I implement the valueOf method so that references to me as a raw string will work properly 
+	  This requires changes to the exporter to remove the standard prefix and the _ to look like a standard Javascript method "
+
+	<jsAlias: 'valueOf'>
+	^ string valueOf
 ]
 
 { #category : #'instance creation' }

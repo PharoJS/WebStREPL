@@ -34,11 +34,10 @@ WrFetchServer >> initialize [
 	self css: codeGenerator css.
 	self favicon: codeGenerator favicon.
 	self html: codeGenerator html.
-	jsExporter := PjExporter new.
+	jsExporter := WrExporter new.
 	jsExporter initializeWithAppClass: WrFetchClient.
 	self javascript: jsExporter javascriptCode.
-	GeneratingTranspiler := jsExporter transpiler.
-
+	GeneratingTranspiler := jsExporter transpiler
 ]
 
 { #category : #'initialize-release' }

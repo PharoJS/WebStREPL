@@ -1,11 +1,20 @@
 Class {
 	#name : #PjCharacter,
-	#superclass : #PjString,
+	#superclass : #WrString,
 	#instVars : [
 		'string'
 	],
 	#category : #'WebStREPL-PharoJS'
 }
+
+{ #category : #'pharoJs support' }
+PjCharacter class >> jsTranspilationImportMethods [
+
+	<pharoJsSkip>
+	^ { 
+		  (Character class -> #( cr escape lf linefeed space tab )).
+		  (Character -> #( isVowel isCharacter to: )) }
+]
 
 { #category : #'instance creation' }
 PjCharacter class >> new [
@@ -19,6 +28,12 @@ PjCharacter class >> with: aString [
 	^ self new with: aString
 ]
 
+{ #category : #copying }
+PjCharacter >> , other [
+
+	self errorNotIndexable
+]
+
 { #category : #converting }
 PjCharacter >> asJsObject [
 
@@ -28,8 +43,27 @@ PjCharacter >> asJsObject [
 { #category : #converting }
 PjCharacter >> asString [
 
-	^ string asString
-	
+	<jsAlias: 'toString'>
+	^ string
+]
+
+{ #category : #accessing }
+PjCharacter >> at: index [
+
+	self errorNotIndexable
+]
+
+{ #category : #accessing }
+PjCharacter >> at: index put: ignored [
+
+	self errorNotIndexable
+]
+
+{ #category : #private }
+PjCharacter >> errorNotIndexable [
+
+	self error:
+		'Instances of Character are not indexable'
 ]
 
 { #category : #testing }
@@ -46,6 +80,16 @@ PjCharacter >> isString [
 { #category : #printing }
 PjCharacter >> printOn: aStream [
 	aStream nextPutAll: '$';nextPutAll: string
+]
+
+{ #category : #converting }
+PjCharacter >> valueOf [
+
+	" I implement the valueOf method so that references to me as a raw string will work properly 
+	  This requires changes to the exporter to remove the standard prefix and the _ to look like a standard Javascript method "
+
+	<jsAlias: 'valueOf'>
+	^ string asString
 ]
 
 { #category : #'instance creation' }
