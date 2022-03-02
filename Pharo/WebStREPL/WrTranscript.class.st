@@ -6,7 +6,7 @@ Class {
 	#classInstVars : [
 		'element'
 	],
-	#category : #'WebStREPL-Common'
+	#category : #'WebStREPL-Fetch'
 }
 
 { #category : #visibility }

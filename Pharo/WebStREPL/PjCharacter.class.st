@@ -3,7 +3,7 @@ I represent Characters. Currently I am a sub-class of PjString, but that's proba
 "
 Class {
 	#name : #PjCharacter,
-	#superclass : #WrString,
+	#superclass : #PjObject,
 	#instVars : [
 		'string'
 	],
@@ -26,15 +26,21 @@ PjCharacter class >> new [
 	
 ]
 
+{ #category : #accessing }
+PjCharacter class >> value: anInteger [
+
+	^ self with: (String js_fromCharCode: anInteger)
+]
+
 { #category : #'instance creation' }
 PjCharacter class >> with: aString [
 	^ self new with: aString
 ]
 
-{ #category : #copying }
-PjCharacter >> , other [
+{ #category : #comparing }
+PjCharacter >> = other [
 
-	self errorNotIndexable
+	^ other isCharacter and: [string = other asString]
 ]
 
 { #category : #converting }
@@ -67,17 +73,6 @@ PjCharacter >> errorNotIndexable [
 
 	self error:
 		'Instances of Character are not indexable'
-]
-
-{ #category : #testing }
-PjCharacter >> isCollection [
-
-	^ false
-]
-
-{ #category : #testing }
-PjCharacter >> isString [
-	^ false
 ]
 
 { #category : #printing }

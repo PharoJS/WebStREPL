@@ -144,6 +144,7 @@ WrFetchClient >> eval [
 WrFetchClient >> eval: jsCode [
 
 	(jsCode beginsWith: 'Error:') ifTrue: [ ^ self displayError: jsCode ].
+	console log: jsCode.
 	[ self displayResult: (window eval: jsCode) value ]
 		on: Error
 		do: [ :ex | self displayError: ex description ]

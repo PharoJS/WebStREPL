@@ -1,119 +1,14 @@
 Class {
 	#name : #WrFetchClientTest,
-	#superclass : #PjWebAppTestCase,
+	#superclass : #WrRemoteTesting,
 	#traits : 'PjTAppRunsInJS',
 	#classTraits : 'PjTAppRunsInJS classTrait',
-	#instVars : [
-		'server'
-	],
 	#category : #'WebStREPLTests-Fetch'
 }
 
 { #category : #'suite parameters' }
 WrFetchClientTest class >> appClass [ 	
 	^WrFetchClient 
-]
-
-{ #category : #tests }
-WrFetchClientTest class >> ignoreClasses [
-
-	^ { 
-		  WrFetchClient.
-		  PjWebApplication.
-		  PjBrowserGlobals.
-		  PjDOMApplication.
-		  PjDomGlobals.
-		  PjApplication.
-		  PjUniversalGlobals.
-		  PjSharedPool.
-		  PjMaterializer.
-		  PjDomController.
-		  PjRectangle.
-		  Date.
-		  PjMagnitude.
-		  ArithmeticError.
-		  PjProxyInfo.
-		  PjSortedCollection.
-		  PjCollection.
-		  PjStringStream.
-		  PjLookupKey. GeometryError . GeometryObject . Point }
-]
-
-{ #category : #tests }
-WrFetchClientTest >> assert: command result: result [
-
-	| response responseForComparison |
-	response := (self send: command) asString.
-	responseForComparison := response copyWithoutAll: String crlf.
-	self assert: responseForComparison equals: result
-]
-
-{ #category : #tests }
-WrFetchClientTest >> clickEvalButton [
-
-	^ self evalBlock: [ 
-		  WrFetchClient currentInstance evalButton click ]
-]
-
-{ #category : #tests }
-WrFetchClientTest >> ignoreClasses [
-	^ self class ignoreClasses
-]
-
-{ #category : #tests }
-WrFetchClientTest >> inputText: aString [
-
-	^ self evalBlock: [ 
-		  WrFetchClient currentInstance inputTextArea value: aString ]
-]
-
-{ #category : #tests }
-WrFetchClientTest >> outputZone [
-
-	^ self evalBlock: [ 
-		  WrFetchClient currentInstance outputZone]
-]
-
-{ #category : #tests }
-WrFetchClientTest >> send: aString [
-
-	| initialOutputZone |
-	initialOutputZone := self outputZone.
-	self inputText: aString.
-	self clickEvalButton.
-	self waitWhile: [ self outputZone == initialOutputZone ].
-	^ self outputZone textContent
-]
-
-{ #category : #tests }
-WrFetchClientTest >> server [
-	^server
-]
-
-{ #category : #tests }
-WrFetchClientTest >> serverClass [
-
-	^ WrFetchServer
-]
-
-{ #category : #tests }
-WrFetchClientTest >> setUp [
-
-	super setUp.
-	server := self serverClass new.
-	server start.
-	self bridge server znServer delegate
-		map: WrFetchClient compileTag
-		to: [ :request | self server handleRequest: request ].
-	app serverUrl:
-		(self bridge serverUrl / WrFetchClient compileTag) asString
-]
-
-{ #category : #tests }
-WrFetchClientTest >> tearDown [
-
-	super tearDown.
-	server stop
 ]
 
 { #category : #tests }
@@ -125,6 +20,19 @@ WrFetchClientTest >> testArithmetics [
 	self assert: '154 / 2' result: '77'.
 	self assert: '42/0' result: 'ZeroDivide'.
 	self assert: 'Float infinity' result: 'Float infinity'
+]
+
+{ #category : #tests }
+WrFetchClientTest >> testArrayStreams [
+
+	self
+		assert: 'Array streamContents: [ : stream |
+	stream
+		<< $I
+		<< 17;
+		nextPut: 42;
+		<< 95 ]'
+		result: '#(''I'' 42)' " should really be #($I 42)"
 ]
 
 { #category : #tests }
@@ -149,9 +57,11 @@ WrFetchClientTest >> testEnsureChangeFileIsUnchanged [
 { #category : #tests }
 WrFetchClientTest >> testEquality [
 
-	#( '42=42' '''abc'' = ''abc''' ) do: [ :each | 
-		self assert: each result: 'true' ].
-	#( '42=#somethingElse' '''abc'' = 123' ) do: [ :each | 
+
+	#( '42=42' '$I=$I' '''abc'' = ''abc''' '''123'' = 123'
+	   '$I isCharacter' ) do: [ :each | self assert: each result: 'true' ]. " we'd like '123'~=123 but Javascript "
+	#( '42=#somethingElse' '''I''=$I' '''I'' isCharacter'
+	   '$I=''I''' '''abc'' = 123' ) do: [ :each | 
 		self assert: each result: 'false' ]
 ]
 
@@ -160,6 +70,31 @@ WrFetchClientTest >> testExceptions [
 
 	self assert: 'ZeroDivide signal' result: 'ZeroDivide'.
 	self assert: 'Error signal' result: 'Error'
+]
+
+{ #category : #tests }
+WrFetchClientTest >> testStreams [
+
+	self assert: 'String streamContents: [:s| s << $I]' result: '''I'''
+]
+
+{ #category : #tests }
+WrFetchClientTest >> testStringStreams [
+
+String streamContents: [ : stream |
+	stream
+		<< $I
+		<< ' love';
+		space;
+		nextPutAll: 'Pharo!' ].
+	self
+		assert: 'String streamContents: [ : stream |
+	stream
+		<< $I
+		<< '' love'';
+		space;
+		nextPutAll: ''Pharo!'' ]'
+		result: '''I love Pharo!'''
 ]
 
 { #category : #tests }
@@ -181,7 +116,14 @@ WrFetchClientTest >> testTemporaryAuthorNameSet [
 { #category : #tests }
 WrFetchClientTest >> testTranscript [
 
-	| jsCode |
-	jsCode := WrFetchServerDelegate new
-		          transpile: 'Transcript show: ''hello'''
+"	| jsCode |
+	jsCode := WrFetchServerDelegate new transpile:
+		          'Transcript show: ''hello'''.
+"		self assert: '| loveString |
+loveString := String streamContents: [ : stream |
+	stream
+		<< $I;
+		space;
+		<< ''love Pharo!'' ].
+Transcript cr; show: loveString.' result: 42
 ]
